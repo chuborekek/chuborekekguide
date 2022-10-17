@@ -17,10 +17,14 @@ const App = () => {
 
 
   useEffect(()=>{
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(({coords: {latitude,longitude}})=>{
-         setCoordinates({lat:latitude,lng:longitude});
-          
-      })
+      setCoordinates({lat:latitude,lng:longitude});
+     })
+    } else {
+      alert("Please allow/turn on your GPS to use the App accordingly. Thank you!");
+    }
+     
   },[]);
 
   useEffect(()=>{
