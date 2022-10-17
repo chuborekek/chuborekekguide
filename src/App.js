@@ -18,12 +18,32 @@ const App = () => {
 
   useEffect(()=>{
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(({coords: {latitude,longitude}})=>{
-      setCoordinates({lat:latitude,lng:longitude});
-     })
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then(function (result) {
+          if (result.state === "granted" || result.state === "prompt") {
+            console.log(result.state);
+            navigator.geolocation.getCurrentPosition(({coords: {latitude,longitude}})=>{
+             setCoordinates({lat:latitude,lng:longitude});
+            });
+          } else if (result.state === "denied") {
+            alert("Please allow/turn on your GPS to use the App accordingly. Thank you!");
+          }
+          result.onchange = function () {
+            console.log(result.state);
+          };
+        });
     } else {
       alert("Please allow/turn on your GPS to use the App accordingly. Thank you!");
     }
+
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition(({coords: {latitude,longitude}})=>{
+    //   setCoordinates({lat:latitude,lng:longitude});
+    //  })
+    // } else {
+    //   alert("Please allow/turn on your GPS to use the App accordingly. Thank you!");
+    // }
      
   },[]);
 
